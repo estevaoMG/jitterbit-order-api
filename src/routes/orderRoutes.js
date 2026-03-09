@@ -86,22 +86,56 @@ router.get(
 /**
  * @swagger
  * /order/{id}:
- *   put:
- *     summary: Atualizar pedido
- *     tags: [Orders]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *     responses:
- *       200:
- *         description: Pedido atualizado
+*   put:
+*     summary: Atualizar pedido
+*     tags: [Orders]
+*     security:
+*       - bearerAuth: []
+*     parameters:
+*       - in: path
+*         name: id
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             required:
+*               - orderId
+*               - value
+*               - creationDate
+*               - items
+*             properties:
+*               orderId:
+*                 type: string
+*                 example: PED001
+*               value:
+*                 type: number
+*                 example: 9000
+*               creationDate:
+*                 type: string
+*                 format: date
+*                 example: 2026-03-09
+*               items:
+*                 type: array
+*                 items:
+*                   type: object
+*                   properties:
+*                     productId:
+*                       type: integer
+*                       example: 1
+*                     quantity:
+*                       type: integer
+*                       example: 3
+*                     price:
+*                       type: number
+*                       example: 3000
+*     responses:
+*       200:
+*         description: Pedido atualizado
  */
 router.put(
   "/order/:id",
