@@ -5,7 +5,7 @@ const orderController = require("../controllers/orderController");
 const auth = require("../middleware/authMiddleware");
 const validate = require("../middleware/validateMiddleware");
 const { orderSchema } = require("../validations/orderValidation");
-
+const mapExternalOrder = require("../middleware/orderMapping"); // importe o middleware
 /**
  * @swagger
  * /order:
@@ -37,6 +37,7 @@ const { orderSchema } = require("../validations/orderValidation");
 router.post(
   "/order",
   auth,
+  mapExternalOrder,
   validate(orderSchema),
   orderController.createOrder
 );
