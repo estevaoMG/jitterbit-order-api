@@ -2,17 +2,18 @@ const Joi = require("joi");
 
 exports.orderSchema = Joi.object({
 
-  numeroPedido: Joi.string().required(),
+  orderId: Joi.string().required(),
 
-  valorTotal: Joi.number().required(),
+  value: Joi.number().required(),
 
-  dataCriacao: Joi.date().required(),
+  creationDate: Joi.date().required(),
 
   items: Joi.array().items(
     Joi.object({
-      idItem: Joi.string().required(),
-      quantidadeItem: Joi.number().required(),
-      valorItem: Joi.number().required()
+      productId: Joi.number().required(),
+      quantity: Joi.number().required(),
+      price: Joi.number().required()
     })
-  )
+  ).required()
+
 });

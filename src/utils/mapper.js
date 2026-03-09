@@ -1,14 +1,23 @@
-function mapOrder(data) {
-  return {
-    orderId: data.numeroPedido,
-    value: data.valorTotal,
-    creationDate: new Date(data.dataCriacao),
-    items: data.items.map(item => ({
-      productId: Number(item.idItem),
-      quantity: item.quantidadeItem,
-      price: item.valorItem
-    }))
-  };
-}
+module.exports = function mapOrder(data) {
 
-module.exports = mapOrder;
+  return {
+
+    orderId: data.orderId,
+
+    value: data.value,
+
+    creationDate: data.creationDate,
+
+    items: data.items.map(item => ({
+
+      productId: item.productId,
+
+      quantity: item.quantity,
+
+      price: item.price
+
+    }))
+
+  };
+
+};
