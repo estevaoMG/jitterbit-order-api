@@ -14,3 +14,15 @@ router.put("/order/:id", orderController.updateOrder);
 router.delete("/order/:id", orderController.deleteOrder);
 
 module.exports = router;
+
+const auth = require("../middleware/authMiddleware");
+
+router.post("/order", auth, validate(orderSchema), orderController.createOrder);
+
+router.get("/order/:id", auth, orderController.getOrder);
+
+router.get("/order/list", auth, orderController.getAllOrders);
+
+router.put("/order/:id", auth, orderController.updateOrder);
+
+router.delete("/order/:id", auth, orderController.deleteOrder);
