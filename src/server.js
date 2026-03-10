@@ -18,11 +18,9 @@ app.use(morgan("dev"));
 
 connectDB();
 
-// rotas
 app.use("/", authRoutes);
 app.use("/", orderRoutes);
 
-// swagger
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const PORT = process.env.PORT || 3000;
