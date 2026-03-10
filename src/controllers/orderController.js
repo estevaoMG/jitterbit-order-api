@@ -1,79 +1,73 @@
-const Order = require("../models/Order");
-const mapOrder = require("../utils/mapper");
+// src/controllers/orderController.js
 
-exports.createOrder = async (req, res) => {
+const orderService = require('../services/orderService');
+const { orderSchema } = require('../validations/orderValidation');
+
+// Criar novo pedido
+const createOrder = async (req, res, next) => {
   try {
+    // Validar dados do pedido
+    const { error } = orderSchema.validate(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
 
-    const mappedData = mapOrder(req.body);
-
-    const order = new Order(mappedData);
-    await order.save();
-
+    const order = await orderService.createOrder(req.body);
     res.status(201).json(order);
-
-  } catch (error) {
-    res.status(500).json({error: error.message});
+  } catch (err) {
+    next(err); // passa para o middleware de erro
   }
 };
 
-exports.getOrder = async (req, res) => {
-
+// Obter pedido por ID
+const getOrderById = async (req, res, next) => {
   try {
-
-    const order = await Order.findOne({orderId: req.params.id});
-
-    if (!order) {
-      return res.status(404).json({message: "Order not found"});
-    }
-
+    const order = await orderService.getOrderById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Pedido não encontrado' });
     res.json(order);
-
-  } catch (error) {
-    res.status(500).json({error: error.message});
+  } catch (err) {
+    next(err);
   }
 };
 
-exports.getAllOrders = async (req, res) => {
-
+// Atualizar pedido por ID
+const updateOrder = async (req, res, next) => {
   try {
+    // Validar dados do pedido
+    const { error } = orderSchema.validate(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
 
-    const orders = await Order.find();
+    const order = await orderService.updateOrder(req.params.id, req.body);
+    if (!order) return res.status(404).json({ message: 'Pedido não encontrado' });
+    res.json(order);
+  } catch (err) {
+    next(err);
+  }
+};
 
+// Deletar pedido por ID
+const deleteOrder = async (req, res, next) => {
+  try {
+    const success = await orderService.deleteOrder(req.params.id);
+    if (!success) return res.status(404).json({ message: 'Pedido não encontrado' });
+    res.json({ message: 'Pedido deletado com sucesso' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Listar todos os pedidos (opcional)
+const listOrders = async (req, res, next) => {
+  try {
+    const orders = await orderService.listOrders();
     res.json(orders);
-
-  } catch (error) {
-    res.status(500).json({error: error.message});
+  } catch (err) {
+    next(err);
   }
 };
 
-exports.updateOrder = async (req, res) => {
-
-  try {
-
-    const mappedData = mapOrder(req.body);
-
-    const order = await Order.findOneAndUpdate(
-      {orderId: req.params.id},
-      mappedData,
-      {new: true}
-    );
-
-    res.json(order);
-
-  } catch (error) {
-    res.status(500).json({error: error.message});
-  }
-};
-
-exports.deleteOrder = async (req, res) => {
-
-  try {
-
-    await Order.deleteOne({orderId: req.params.id});
-
-    res.json({message: "Order deleted"});
-
-  } catch (error) {
-    res.status(500).json({error: error.message});
-  }
+module.exports = {
+  createOrder,
+  getOrderById,
+  updateOrder,
+  deleteOrder,
+  listOrders,
 };
