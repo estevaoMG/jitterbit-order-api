@@ -1,23 +1,18 @@
-// src/controllers/orderController.js
-
 const orderService = require('../services/orderService');
 const { orderSchema } = require('../validations/orderValidation');
 
-// Criar novo pedido
 const createOrder = async (req, res, next) => {
   try {
-    // Validar dados do pedido
     const { error } = orderSchema.validate(req.body);
     if (error) return res.status(400).json({ message: error.details[0].message });
 
     const order = await orderService.createOrder(req.body);
     res.status(201).json(order);
   } catch (err) {
-    next(err); // passa para o middleware de erro
+    next(err);
   }
 };
 
-// Obter pedido por ID
 const getOrderById = async (req, res, next) => {
   try {
     const order = await orderService.getOrderById(req.params.id);
@@ -28,10 +23,8 @@ const getOrderById = async (req, res, next) => {
   }
 };
 
-// Atualizar pedido por ID
 const updateOrder = async (req, res, next) => {
   try {
-    // Validar dados do pedido
     const { error } = orderSchema.validate(req.body);
     if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -43,7 +36,6 @@ const updateOrder = async (req, res, next) => {
   }
 };
 
-// Deletar pedido por ID
 const deleteOrder = async (req, res, next) => {
   try {
     const success = await orderService.deleteOrder(req.params.id);
@@ -54,7 +46,6 @@ const deleteOrder = async (req, res, next) => {
   }
 };
 
-// Listar todos os pedidos (opcional)
 const listOrders = async (req, res, next) => {
   try {
     const orders = await orderService.listOrders();
