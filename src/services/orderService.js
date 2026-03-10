@@ -1,11 +1,11 @@
 // src/services/orderService.js
 
 const Order = require('../models/Order');
-const mapper = require('../utils/mapper');
+const mapOrder = require('../utils/mapper');
 
 // Criar um novo pedido
 const createOrder = async (orderData) => {
-  const mappedOrder = mapper.mapOrder(orderData);
+  const mappedOrder = mapOrder(orderData);
   const order = new Order(mappedOrder);
   await order.save();
   return order;
@@ -18,7 +18,7 @@ const getOrderById = async (id) => {
 
 // Atualizar pedido por ID
 const updateOrder = async (id, updatedData) => {
-  const mappedData = mapper.mapOrder(updatedData);
+  const mappedData = mapOrder(updatedData);
   const order = await Order.findByIdAndUpdate(id, mappedData, { new: true });
   return order;
 };
